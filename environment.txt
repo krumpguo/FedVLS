@@ -1,0 +1,8 @@
+torch
+torchaudio
+torchtext
+torchvision
+calmsize
+memory-profiler
+opacus
+portalocker

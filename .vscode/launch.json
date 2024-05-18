@@ -1,0 +1,208 @@
+{
+
+    "version": "0.2.0",
+    "configurations": [
+
+
+        {
+            "name": "FedAvg",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs", "64", "-nc", "10","-aug", "True", "-jr", "1",  "-nb", "10", "-data", "cifar100", "-m", "mobilenetv2", "-algo", "FedGELA", "-lr", "0.01", "-partition", "noniid", "-al", "0.1", "-ls", "2","-ed", "1e-5", "-gr", "2", "-did", "5"],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedSpeed",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-partition", "noniid", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedSpeed", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "0.001", "-gr", "100", "-did", "3","-rho", "0.1", "-lam","0.1","-ldg","0.998","-ld","True" ],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedBug",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "0.3", "-partition", "noniid", "-nb", "10", "-data", "cifar10", "-m", "cnn", "-algo", "FedBUG", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "7", ],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "FedPVR",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-partition", "noniid", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedPVR", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "0" ],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "SCAFFOLD",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-partition", "noniid", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "SCAFFOLD", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "7", ],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedNTD",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-partition", "noniid", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedNTD", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-5", "-gr", "100", "-did", "7", ],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedEXE",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-partition", "noniid", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedEXE", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "1", "-bt", "0.1", "-lam", "0.1"],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedAvgD",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "18","-ncp", "3","-aug", "True", "-jr", "1", "-nb", "10", "-data", "Digit5", "-m", "mobilenetv2", "-algo", "FedAvgD", "-lr", "0.01", "-al", "0.5", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "5"],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedSD",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "100", "-data", "cifar100", "-m", "mobilenetv2", "-algo", "FedSD", 
+            "-pro_d", "64", "-use_prod", "True", "-lr", "0.01", "-al", "0.5", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "7", "-sd_evalute", "1"],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "FedMTS",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedMTS", "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-5", "-gr", "100", "-did", "1", "-mu", "0.3", "-bt", "0.2", "-thre", "0.5", "-nrt", "10", "-lam", "0.05"],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "FedLogitCal",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "200", "-data", "tinyimagenet", "-m", "mobilenetv2", "-algo", "FedLogitCal", "-lr", "0.01", "-al", "0.5", "-ls", "5","-ed", "1e-4", "-gr", "100", "-did", "7", "-dd", "./data/tiny-imagenet-200/"],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "FedNova",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "100", "-data", "cifar100", "-m", "mobilenetv2", "-algo", "FedNova", "-lr", "0.01", "-al", "0.5", "-ls", "10","-ed", "1e-4", "-gr", "100", "-did", "7", "-mom", "0.9"],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "FedOptim",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "100", "-data", "cifar100", "-m", "mobilenetv2", "-algo", "FedOptim", "-lr", "0.01", "-al", "0.5", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "7", "-ser_opti", "adam"],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "MOON",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "100", "-data", "cifar100", "-m", "mobilenetv2", "-algo", "MOON", "-lr", "0.01", "-al", "0.5", "-ls", "10","-ed", "1e-4", "-gr", "100", "-did", "3", "-mu", "1", "-pro_d", "256", "-tem", "0.5", "-use_prod", "True"],
+            "cwd": "${workspaceFolder}/system"
+        },
+
+        {
+            "name": "FedPAC",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","16", "-nc", "10", "-aug", "True", "-jr", "0.3", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedPAC", "-lr", "0.01", "-al", "0.1", "-ls", "1","-gr", "100", "-did", "7" ],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedPACA",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","16", "-nc", "20", "-jr", "1", "-nb", "10", "-data", "Cifar10-0.5", "-m", "cnn", "-algo", "FedPACA", "-gr", "200", "-did", "3","-ls", "1" ,"-al", "0.8" ,"-lam", "1", "-mu", "1", "-go", "cnn"],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "generate_cifar100",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["noniid", "-", "dir"],
+            "cwd": "${workspaceFolder}/dataset"
+        },
+        {
+            "name": "FedGKP",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedGKP", 
+            "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "3",  "-lam", "1","-rho","0.1"],
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "name": "FedSAM",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-lbs","64", "-nc", "10","-aug", "True", "-jr", "1", "-nb", "10", "-data", "cifar10", "-m", "mobilenetv2", "-algo", "FedSAM", 
+            "-lr", "0.01", "-al", "0.1", "-ls", "1","-ed", "1e-4", "-gr", "100", "-did", "6", "-lam", "1","-rho","0.1"],
+            "cwd": "${workspaceFolder}/system"
+        }
+    ]
+}
