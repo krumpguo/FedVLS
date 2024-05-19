@@ -1,5 +1,5 @@
 import time
-from flcore.clients.clientexe import clientEXE
+from flcore.clients.cliented import clientED
 from threading import Thread
 import torch.nn as nn
 import torch
@@ -8,7 +8,7 @@ import copy
 from scipy import special
 from scipy.special import kl_div
 
-class FedEXE(object):
+class FedED(object):
     def __init__(self, args, times, party2loaders, global_train_dl, test_dl):
         self.args = args
         self.device = args.device
@@ -48,7 +48,7 @@ class FedEXE(object):
  
         self.party2loaders_test = test_dl
 
-        self.set_clients(clientEXE, party2loaders)
+        self.set_clients(clientED, party2loaders)
         print(f"\nJoin ratio / total clients: {self.join_ratio} / {self.num_clients}")
         print("Finished creating server and clients.")
         self.Budget = []
