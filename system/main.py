@@ -11,7 +11,7 @@ import logging
 import time
 
 from flcore.servers.serveravg import FedAvg
-from flcore.servers.serverexe import FedEXE
+from flcore.servers.serverexe import FedED
 from flcore.servers.servermr import FedMR
 from flcore.servers.servergela import FedGELA
 from flcore.servers.serverntd import FedNTD
@@ -121,11 +121,11 @@ def run(args):
             args.model = BaseHeadSplit(args.model, args.head)
             server = FedAvg(args, i, party2loaders, global_train_dl, test_dl)
   
-        elif args.algorithm == "FedEXE":
+        elif args.algorithm == "FedED":
             args.head = copy.deepcopy(args.model.fc)
             args.model.fc = nn.Identity()
             args.model = BaseHeadSplit(args.model, args.head)
-            server = FedEXE(args, i, party2loaders, global_train_dl, test_dl)
+            server = FedED(args, i, party2loaders, global_train_dl, test_dl)
             
         elif args.algorithm == "FedMR":
             args.head = copy.deepcopy(args.model.fc)
@@ -314,7 +314,7 @@ if __name__ == "__main__":
 
     elif args.algorithm == "FedNTD":
         print("the coefficient of NTD loss : {}".format(args.beta))
-    elif args.algorithm == "FedEXE":
+    elif args.algorithm == "FedED":
         print("the coefficient of NED loss : {}".format(args.lamda))
 
         print("the l2_gre : {}".format(args.weight_decay))
