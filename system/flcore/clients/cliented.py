@@ -7,7 +7,7 @@ import copy
 import torch.nn.functional as F
 from torch.nn.utils import parameters_to_vector
 
-class clientEXE(object):
+class clientED(object):
     def __init__(self, args, id, train_samples, **kwargs):
         self.model = copy.deepcopy(args.model)
         self.algorithm = args.algorithm
