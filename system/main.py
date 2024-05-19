@@ -11,7 +11,7 @@ import logging
 import time
 
 from flcore.servers.serveravg import FedAvg
-from flcore.servers.serverexe import FedED
+from flcore.servers.servered import FedED
 from flcore.servers.servermr import FedMR
 from flcore.servers.servergela import FedGELA
 from flcore.servers.serverntd import FedNTD
