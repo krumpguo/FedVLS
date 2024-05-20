@@ -114,27 +114,3 @@ class clientVLS(object):
         no_exist_label_loss = kl(output_no_exist_log_soft, output_no_exist_teacher_soft)
         return no_exist_label_loss    
             
-    def LADEloss(self, y_pred, target, remine_lambda=0.1):
-        cls_weight = (self.num_per_class.float() / torch.sum(self.num_per_class.float())).cuda()
-        balanced_prior = torch.tensor(1. / self.num_classes).float().cuda()
-        # my = self.prior[target]
-        per_cls_pred_spread = y_pred.T * (target == torch.arange(0, self.num_classes).view(-1, 1).type_as(target))  # C x N
-        pred_spread = (y_pred - torch.log(self.prior + 1e-9) + torch.log(balanced_prior + 1e-9)).T # C x N
-
-        num_samples_per_cls = torch.sum(target == torch.arange(0, self.num_classes).view(-1, 1).type_as(target), -1).float()  # C
-        estim_loss, first_term, second_term = self.remine_lower_bound(per_cls_pred_spread, pred_spread, num_samples_per_cls, remine_lambda)
-        
-        loss = -torch.sum(second_term *cls_weight)
-        return loss
-    
-    def remine_lower_bound(self, x_p, x_q, num_samples_per_cls, remine_lambda):
-        loss, first_term, second_term = self.mine_lower_bound(x_p, x_q, num_samples_per_cls)
-        reg = (second_term ** 2) * remine_lambda
-        return loss - reg, first_term, - second_term 
-    
-    def mine_lower_bound(self, x_p, x_q, num_samples_per_cls):
-        N = x_p.size(-1)
-        first_term = torch.sum(x_p, -1) / (num_samples_per_cls + 1e-8)
-        second_term = torch.logsumexp(x_q, -1) - np.log(N)
-
-        return first_term - second_term, first_term, second_term
