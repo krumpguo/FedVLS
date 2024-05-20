@@ -12,15 +12,11 @@ import time
 
 from flcore.servers.serveravg import FedAvg
 from flcore.servers.servervls import FedVLS
-from flcore.servers.servermr import FedMR
-from flcore.servers.servergela import FedGELA
 from flcore.servers.serverntd import FedNTD
 from flcore.servers.serversam import FedSAM
 from flcore.servers.serverlogitcal import FedLogitCal
-from flcore.servers.serverrs import FedRS
 from flcore.servers.serverexp import FedEXP
 from flcore.servers.serverprox import FedProx
-from flcore.servers.servermoon import MOON
 
 from flcore.trainmodel.models import *
 from flcore.trainmodel.resnetcifar import *
