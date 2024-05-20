@@ -1,15 +1,12 @@
-# FedED
+# FedVLS
 
-Empty Classes Matter in Federated Learning under Label Distribution Skews
+A Closer Look at Label Skews in Federated Learning
 
 ## Requirements
 ### Installation
 Create a conda environment and install dependencies:
 ```python
-conda create -n feded python=3.11.5
-conda activate feded
-
-pip install -r environment.txt
+conda env create -f environment.yaml
 
 ```
 ### Dataset
