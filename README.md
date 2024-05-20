@@ -6,11 +6,11 @@ A Closer Look at Label Skews in Federated Learning
 ### Installation
 Create a conda environment and install dependencies:
 ```python
-conda env create -f environment.yaml
+conda env create -f env_cuda_latest.yaml
 
 ```
 ### Dataset
-Here we provide the implementation on MNIST, Cifar10, Cifar100, and TinyImagenet datasets. The four datasets will be automatically downloaded in your datadir.
+Here we provide the implementation on MNIST, Cifar10, Cifar100, and TinyImagenet datasets. The Cifar10 and Cifar100 datasets will be automatically downloaded in your datadir.
 
 ### Model Structure
 As for the models used in the paper, we use a DNN with three fully connected layers for the MNIST dataset and the same model structure of Mobilenet_v2 as [CCVR](https://arxiv.org/pdf/2106.05001) for other datasets.
