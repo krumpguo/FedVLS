@@ -48,7 +48,7 @@ As for the models used in the paper, we use a DNN with three fully connected lay
 ### Usage
 Here is an example to run FedED on CIFAR10 with mobilenetv2:
 ```
-python -u main.py -lbs 64 -nc 10 -jr 1 -nb 10 -data cifar10 -m mobilenetv2 -algo FedED -gr 100 -did 0 -aug True -lr 0.01 -partition noniid -al 0.05 -ls 10 -ed 1e-5 -lam 0.1
+python -u main.py -lbs 64 -nc 10 -jr 1 -nb 10 -data cifar10 -m mobilenetv2 -algo FedVLS -gr 100 -did 0 -aug True -lr 0.01 -partition noniid -al 0.1 -ls 10 -ed 1e-5 -lam 0.1
 ```
 
 ### Acknowledgement
