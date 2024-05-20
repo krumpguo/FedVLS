@@ -1,12 +1,3 @@
-# *************************************************************************
-# This file may have been modified by Bytedance Inc. (“Bytedance Inc.'s Mo-
-# difications”). All Bytedance Inc.'s Modifications are Copyright (2023) B-
-# ytedance Inc..  
-# *************************************************************************
-
-# Code ported from https://github.com/QinbinLi/MOON/blob/main/utils.py
-
-
 import random
 import os
 import numpy as np
