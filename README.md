@@ -10,7 +10,19 @@ conda env create -f env_cuda_latest.yaml
 
 ```
 ### Dataset
-Here we provide the implementation on MNIST, Cifar10, Cifar100, and TinyImagenet datasets. The Cifar10 and Cifar100 datasets will be automatically downloaded in your datadir.
+Here we provide the implementation on MNIST, Cifar10, Cifar100, and TinyImagenet datasets. The MNIST, Cifar10 and Cifar100 datasets will be automatically downloaded in your datadir. 
+
+As for TinyImagenet, the following steps show the processing progress.
+
+- 1.Download the dataset to "data" directory from this link: http://cs231n.stanford.edu/tiny-imagenet-200.zip
+
+- 2.Unzip the downloaded file under "data" directory.
+
+- 3.Lastly, to reformat the validation set, under the folder "data/tiny-imagenet-200", run:
+
+```
+python preprocess_tiny_imagenet.py
+```
 
 ### Model Structure
 As for the models used in the paper, we use a DNN with three fully connected layers for the MNIST dataset and the same model structure of Mobilenet_v2 as [CCVR](https://arxiv.org/pdf/2106.05001) for other datasets.
