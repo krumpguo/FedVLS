@@ -40,9 +40,7 @@ class clientLogitCal(object):
         class2data = torch.zeros(n_class)
         all_labels = np.empty((0,), dtype=np.int64)
         for data, targets in trainloader:
-            # targets为每个batch标签
             labels = targets.numpy()  
-            # 拼接到all_labels数组
             all_labels = np.concatenate((all_labels, labels), axis=0)
         uniq_val, uniq_count = np.unique(all_labels, return_counts=True)
         for j, c in enumerate(uniq_val.tolist()):
