@@ -1,12 +1,3 @@
-# *************************************************************************
-# This file may have been modified by Bytedance Inc. (“Bytedance Inc.'s Mo-
-# difications”). All Bytedance Inc.'s Modifications are Copyright (2023) B-
-# ytedance Inc..  
-# *************************************************************************
-
-# Code ported from https://github.com/4uiiurz1/pytorch-auto-augment/blob/master/auto_augment.py
-
-
 # data augmentations
 import random
 import numpy as np
