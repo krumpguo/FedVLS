@@ -95,9 +95,7 @@ def run(args):
                     datadistribution[party_id][i][0] = i
                 all_labels = np.empty((0,), dtype=np.int64)
                 for data, targets in party2loaders[party_id]:
-                # targets为每个batch标签
                     labels = targets.numpy()  
-                # 拼接到all_labels数组
                     all_labels = np.concatenate((all_labels, labels), axis=0)
                 uniq_val, uniq_count = np.unique(all_labels, return_counts=True)
                 for j, c in enumerate(uniq_val.tolist()):
@@ -123,18 +121,6 @@ def run(args):
             args.model = BaseHeadSplit(args.model, args.head)
             server = FedVLS(args, i, party2loaders, global_train_dl, test_dl)
             
-        elif args.algorithm == "FedMR":
-            args.head = copy.deepcopy(args.model.fc)
-            args.model.fc = nn.Identity()
-            args.model = BaseHeadSplit(args.model, args.head)
-            server = FedMR(args, i, party2loaders, global_train_dl, test_dl)
-        
-        elif args.algorithm == "FedGELA":
-            args.head = nn.Identity()
-            args.model.fc = nn.Identity()
-            args.model = BaseHeadSplit(args.model, args.head)
-            server = FedGELA(args, i, party2loaders, global_train_dl, test_dl, party2loaders_ds)
-            
         elif args.algorithm == "FedNTD":
             args.head = copy.deepcopy(args.model.fc)
             args.model.fc = nn.Identity()
@@ -150,20 +136,11 @@ def run(args):
         elif args.algorithm == "FedSAM":
             server = FedSAM(args, i, party2loaders, global_train_dl, test_dl)
             
-        elif args.algorithm == "FedRS":
-            server = FedRS(args, i, party2loaders, global_train_dl, test_dl)
-            
         elif args.algorithm == "FedEXP":
             server = FedEXP(args, i, party2loaders, global_train_dl, test_dl)
             
         elif args.algorithm == "FedProx":
             server = FedProx(args, i, party2loaders, global_train_dl, test_dl)
-            
-        elif args.algorithm == "MOON":
-            args.head = copy.deepcopy(args.model.fc)
-            args.model.fc = nn.Identity()
-            args.model = BaseHeadSplit(args.model, args.head)
-            server = MOON(args, i, party2loaders, global_train_dl, test_dl)
             
         else:
             raise NotImplementedError
@@ -220,7 +197,7 @@ if __name__ == "__main__":
     # practical
     parser.add_argument('-tth', "--time_threthold", type=float, default=10000,
                         help="The threthold for droping slow clients")
-    # pFedMe / PerAvg / FedProx / FedAMP / FedPHP /MOON / MT
+    # FedProx 
     parser.add_argument('-bt', "--beta", type=float, default=0.005,
                         help="Average moving parameter for pFedMe, Second learning rate of Per-FedAvg, \
                         or L1 regularization weight of FedTransfer")
@@ -228,14 +205,6 @@ if __name__ == "__main__":
                         help="Regularization weight")
     parser.add_argument('-mu', "--mu", type=float, default=0.001,
                         help="Proximal rate for FedProx")
-
-    # MOON
-    parser.add_argument('-pro_d',"--proj_dim", type=int, default=256,
-                            help='projection dimension of the projector')
-    parser.add_argument('-tem',"--temperature", type=float, default=0.5,
-                            help='the temperature parameter for contrastive loss')
-    parser.add_argument('-use_prod',"--use_proj_head", type=bool, default=True,
-                            help='whether to use projection head')
 
     #the non-iid level
     parser.add_argument('-al', "--alpha", type=float, default=1.0)
@@ -252,9 +221,7 @@ if __name__ == "__main__":
     parser.add_argument('-rho', "--rho", type=float, default=1.0, help="rho hyper-parameter for sam")
     #fedlogitcal
     parser.add_argument('-cal_tem',"--calibration_temp", type=float, default=0.1, help='calibration temperature')
-    #fedrs
-    parser.add_argument('-rs',"--restricted_strength", type=float, default=0.5,
-                            help='hyper-parameter for restricted strength')
+    
     # FedExp
     parser.add_argument('-eps',"--eps", type=float, default=1e-3,
                             help='epsilon of the FedExp algorithm')
@@ -266,8 +233,7 @@ if __name__ == "__main__":
     if args.device == "cuda" and not torch.cuda.is_available():
         print("\ncuda is not avaiable.\n")
         args.device = "cpu"
-        
-    print("当前时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
+
     
     print("=" * 50)
 
@@ -293,21 +259,13 @@ if __name__ == "__main__":
     print("auto_aug or not : {}".format(args.auto_aug))
     if args.algorithm == "FedProx":
         print("the coefficient of prox loss : {}".format(args.mu))
-    elif args.algorithm == "MOON":
-        print("the coefficient of moon loss : {}".format(args.mu))
-        print("the projection dimension of the projector : {}".format(args.proj_dim))
-        print("the temperature parameter for contrastive loss : {}".format(args.temperature))
-        print("whether to use projection head : {}".format(args.use_proj_head))
     elif args.algorithm == "FedSAM":
         print("momentum : {}".format(args.momentum))
         print("rho : {}".format(args.rho))
     elif args.algorithm == "FedLogitCal":
         print("calibration_temp : {}".format(args.calibration_temp))
-    elif args.algorithm == "FedRS":
-        print("restricted_strength : {}".format(args.restricted_strength))
     elif args.algorithm == "FedEXP":
         print("eps : {}".format(args.eps))
-
     elif args.algorithm == "FedNTD":
         print("the coefficient of NTD loss : {}".format(args.beta))
     elif args.algorithm == "FedVLS":
@@ -323,6 +281,5 @@ if __name__ == "__main__":
 
     current_struct_time1 = time.localtime(time.time())
     formatted_time1 = time.strftime("%Y-%m-%d %H:%M:%S", current_struct_time1)
-    print("当前时间：", formatted_time1)
     
 
