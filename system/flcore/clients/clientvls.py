@@ -7,7 +7,7 @@ import copy
 import torch.nn.functional as F
 from torch.nn.utils import parameters_to_vector
 
-class clientED(object):
+class clientVLS(object):
     def __init__(self, args, id, train_samples, **kwargs):
         self.model = copy.deepcopy(args.model)
         self.algorithm = args.algorithm
@@ -45,9 +45,8 @@ class clientED(object):
         if self.num_per_class == None :
             self.num_per_class = [0. for i in range(self.num_classes)]
             for _, labels in trainloader:
-             # labels是一个包含标签的Tensor
                 for label in labels:
-                    label = label.item()  # 将标签转换为普通的Python整数
+                    label = label.item()  
                     self.num_per_class[label] += 1         
             self.num_per_class = torch.Tensor(self.num_per_class).float().cuda()
             self.prior = self.num_per_class / self.num_per_class.sum()
@@ -78,8 +77,8 @@ class clientED(object):
                 Prior_CELoss = self.PriorCELoss(output, y)
                 
                 teach_output = self.teacher_model(x).detach()
-                NED_loss = self.NEDloss(output, teach_output, self.no_exist_label, self.exist_label, self.exist_prior, y)  
-                loss = Prior_CELoss + LADE_loss * 0.005 + NED_loss * self.lamda
+                VLS_loss = self.VLSloss(output, teach_output, self.no_exist_label, self.exist_label, self.exist_prior, y)  
+                loss = Prior_CELoss + LADE_loss + VLS_loss * self.lamda
                 loss.backward()
                 self.optimizer.step()
                 epoch_loss_collector.append(loss.item())
@@ -101,14 +100,14 @@ class clientED(object):
         N = pred_spread.size(-1)
         second_term = torch.logsumexp(pred_spread, -1) - np.log(N)
         loss = - torch.sum( (- second_term ) * cls_weight)
-        return loss
+        return loss * 0.005
     
     def PriorCELoss(self, output, y):
         logits = output + torch.log(self.prior + 1e-9)
         loss = self.loss(logits, y)
         return loss
 
-    def NEDloss(self, output, teach_output, no_exist_label, exist_label, exist_prior, y):
+    def VLSloss(self, output, teach_output, no_exist_label, exist_label, exist_prior, y):
         output_no_exist_log_soft = torch.nn.functional.log_softmax(output[:,no_exist_label], dim=None, _stacklevel=3, dtype=None)
         output_no_exist_teacher_soft = torch.nn.functional.softmax(teach_output[:,no_exist_label], dim=None, _stacklevel=3, dtype=None)
         kl = nn.KLDivLoss(reduction='batchmean')
