@@ -11,12 +11,15 @@ import logging
 import time
 
 from flcore.servers.serveravg import FedAvg
-from flcore.servers.servervls import FedVLS
+from flcore.servers.serverexe import FedEXE
+from flcore.servers.servermr import FedMR
 from flcore.servers.serverntd import FedNTD
 from flcore.servers.serversam import FedSAM
 from flcore.servers.serverlogitcal import FedLogitCal
+from flcore.servers.serverrs import FedRS
 from flcore.servers.serverexp import FedEXP
 from flcore.servers.serverprox import FedProx
+from flcore.servers.servermoon import MOON
 
 from flcore.trainmodel.models import *
 from flcore.trainmodel.resnetcifar import *
@@ -115,11 +118,17 @@ def run(args):
             args.model = BaseHeadSplit(args.model, args.head)
             server = FedAvg(args, i, party2loaders, global_train_dl, test_dl)
   
-        elif args.algorithm == "FedVLS":
+        elif args.algorithm == "FedEXE":
             args.head = copy.deepcopy(args.model.fc)
             args.model.fc = nn.Identity()
             args.model = BaseHeadSplit(args.model, args.head)
-            server = FedVLS(args, i, party2loaders, global_train_dl, test_dl)
+            server = FedEXE(args, i, party2loaders, global_train_dl, test_dl)
+            
+        elif args.algorithm == "FedMR":
+            args.head = copy.deepcopy(args.model.fc)
+            args.model.fc = nn.Identity()
+            args.model = BaseHeadSplit(args.model, args.head)
+            server = FedMR(args, i, party2loaders, global_train_dl, test_dl)
             
         elif args.algorithm == "FedNTD":
             args.head = copy.deepcopy(args.model.fc)
@@ -136,11 +145,20 @@ def run(args):
         elif args.algorithm == "FedSAM":
             server = FedSAM(args, i, party2loaders, global_train_dl, test_dl)
             
+        elif args.algorithm == "FedRS":
+            server = FedRS(args, i, party2loaders, global_train_dl, test_dl)
+            
         elif args.algorithm == "FedEXP":
             server = FedEXP(args, i, party2loaders, global_train_dl, test_dl)
             
         elif args.algorithm == "FedProx":
             server = FedProx(args, i, party2loaders, global_train_dl, test_dl)
+            
+        elif args.algorithm == "MOON":
+            args.head = copy.deepcopy(args.model.fc)
+            args.model.fc = nn.Identity()
+            args.model = BaseHeadSplit(args.model, args.head)
+            server = MOON(args, i, party2loaders, global_train_dl, test_dl)
             
         else:
             raise NotImplementedError
@@ -173,7 +191,7 @@ if __name__ == "__main__":
     parser.add_argument('-lr', "--local_learning_rate", type=float, default=0.005,
                         help="Local learning rate")
     parser.add_argument('-ed', "--weight_decay", type=float, default=1e-5,help="weight decay during local training")
-    parser.add_argument('-gr', "--global_rounds", type=int, default=2000)
+    parser.add_argument('-gr', "--global_rounds", type=int, default=100)
     parser.add_argument('-ls', "--local_epochs", type=int, default=1, 
                         help="Multiple update steps in one local epoch.")
     parser.add_argument('-algo', "--algorithm", type=str, default="FedAvg")
@@ -206,6 +224,14 @@ if __name__ == "__main__":
     parser.add_argument('-mu', "--mu", type=float, default=0.001,
                         help="Proximal rate for FedProx")
 
+    # MOON
+    parser.add_argument('-pro_d',"--proj_dim", type=int, default=256,
+                            help='projection dimension of the projector')
+    parser.add_argument('-tem',"--temperature", type=float, default=0.5,
+                            help='the temperature parameter for contrastive loss')
+    parser.add_argument('-use_prod',"--use_proj_head", type=bool, default=True,
+                            help='whether to use projection head')
+
     #the non-iid level
     parser.add_argument('-al', "--alpha", type=float, default=1.0)
     parser.add_argument('-partition','--partition', type=str, default='noniid',
@@ -221,7 +247,9 @@ if __name__ == "__main__":
     parser.add_argument('-rho', "--rho", type=float, default=1.0, help="rho hyper-parameter for sam")
     #fedlogitcal
     parser.add_argument('-cal_tem',"--calibration_temp", type=float, default=0.1, help='calibration temperature')
-    
+    #fedrs
+    parser.add_argument('-rs',"--restricted_strength", type=float, default=0.5,
+                            help='hyper-parameter for restricted strength')
     # FedExp
     parser.add_argument('-eps',"--eps", type=float, default=1e-3,
                             help='epsilon of the FedExp algorithm')
@@ -233,7 +261,6 @@ if __name__ == "__main__":
     if args.device == "cuda" and not torch.cuda.is_available():
         print("\ncuda is not avaiable.\n")
         args.device = "cpu"
-
     
     print("=" * 50)
 
@@ -259,17 +286,25 @@ if __name__ == "__main__":
     print("auto_aug or not : {}".format(args.auto_aug))
     if args.algorithm == "FedProx":
         print("the coefficient of prox loss : {}".format(args.mu))
+    elif args.algorithm == "MOON":
+        print("the coefficient of moon loss : {}".format(args.mu))
+        print("the projection dimension of the projector : {}".format(args.proj_dim))
+        print("the temperature parameter for contrastive loss : {}".format(args.temperature))
+        print("whether to use projection head : {}".format(args.use_proj_head))
     elif args.algorithm == "FedSAM":
         print("momentum : {}".format(args.momentum))
         print("rho : {}".format(args.rho))
     elif args.algorithm == "FedLogitCal":
         print("calibration_temp : {}".format(args.calibration_temp))
+    elif args.algorithm == "FedRS":
+        print("restricted_strength : {}".format(args.restricted_strength))
     elif args.algorithm == "FedEXP":
         print("eps : {}".format(args.eps))
+
     elif args.algorithm == "FedNTD":
         print("the coefficient of NTD loss : {}".format(args.beta))
-    elif args.algorithm == "FedVLS":
-        print("the coefficient of VLS loss : {}".format(args.lamda))
+    elif args.algorithm == "FedEXE":
+        print("the coefficient of NED loss : {}".format(args.lamda))
 
         print("the l2_gre : {}".format(args.weight_decay))
     elif args.algorithm == "FedMR":
