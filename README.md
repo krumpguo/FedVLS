@@ -1,6 +1,6 @@
 # FedVLS
 
-A Closer Look at Label Skews in Federated Learning
+Exploring Vacant Classes in Label-Skewed Federated Learning
 
 ## Requirements
 ### Installation
